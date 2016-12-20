@@ -1,0 +1,27 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+	<title>Document</title>
+	<script type="text/javascript">
+		var d=new Date;
+			console.log(d)
+		var year = d.getFullYear();
+			console.log(year)
+
+		var month = d.getMonth()+1;
+			console.log(month)
+			month = month<10?'0'+month:month;//三目运算符，如果满足条件执行第一个month否则执行第二个month
+		var day = d.getDate()
+			console.log(day)
+			day=day<10?'10'+day:day;
+			alert(year+"-"+month+"-"+day)
+
+
+	</script>
+</head>
+<body>
+	
+</body>
+</html>

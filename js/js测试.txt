@@ -1,0 +1,368 @@
+一. 简答题
+	1. 事件三要素
+		事件源
+		事件处理函数
+		事件对象
+	2. 简述事件代理/委托的原理和优缺点
+		事件代理原理：
+			主要利用了事件冒泡，将事件绑定在目标元素的父元素上，当点击目标元素时，代理事件会被激发，通过event.target可以获取目标对象。
+		优点：
+			减少了事件绑定的次数，提高了代码运行效率
+			所以支持目标元素的动态添加。
+			事件处理函数绑定在目标元素的父元素上，
+			添加新元素后原先通过事件代理绑定在父元素上的事件，
+			当点击新添加的元素时也会激发。
+
+		缺点：
+			滥用后导致事件管理混乱，例如：
+			想要给td添加事件，尽量让tr来代理，
+			如果让html或者body来代理，效率也会比较低。
+				<html>
+				<body>
+					<table>
+						<tbody>
+							<tr>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+							</tr>
+						</tbody>
+					</table>
+				</body>
+				</html>
+	3. 如何阻止事件的默认行为，如何停止事件冒泡，在事件冒泡中如何获取当前操作的节点
+		1) IE中
+			阻止事件默认行为	:	event.returnValue=false;
+			停止事件冒泡		:	event.cancelBubble=true;
+			获取当前操作的节点	:	event.srcElement
+		2) 非IE中
+			阻止事件默认行为	:	event.preventDefault();
+			停止事件冒泡		:	event.stopPropagation();
+			获取当前操作的节点	:	event.target
+	4. 谈谈你对JSONP的理解
+		跨域访问的一种方式，跨域的意思是当前服务器中的js代码想要获取另外一个服务器中的数据时候，因为不同源（服务器），远程服务器会禁止本地服务器的访问。可以通过JSONP来访问
+		其原理为
+			在本地服务器中定义一个方法，请求远程服务器上的一个js文件，在这个js文件中写调用本地服务器中定义的方法，调用过程中要传递参数，这时候可以将远程服务器中的数据通过方法调用发送到本地
+
+			例如：
+			本地服务器  http://172.16.20.1 下有个locale.html,核心代码如下
+				<script type="text/javascript">
+					function foo(data){
+						console.log(data);
+					}
+				</script>
+				<script type="text/javascript" src="远程服务器/data.js"></script>
+			远程服务器 http://172.16.20.2 下有个data.js，核心代码如下：
+				data.js中核心代码
+					foo({数据){}
+	5. 写出Array原型对象中的8个方法，并说明其含义
+			push()		向数组的末尾追加元素
+			pop()		从数组的末尾删除元素，并返回删除后的值
+			shift()		从数组的开头删除元素，并返回删除后的值
+			unshift()	从数组的开头插入元素
+			sort()		排序
+			slice()		分割数组
+			splice()	数组的插入，删除，替换
+			forEach()	数组的遍历
+			map()		数组的映射
+			filter()	数组的过滤
+			some()		回调函数返回一次真整个表达式结果就为真
+			every()		回调函数返回一次假整个表达式结果就为假
+
+	6. 写出ECMAScript中5个内置函数？
+		Object		基对象
+		Function 	函数
+		Array 		数组
+		Date		日期
+		RegExp		正则
+		Number			
+		Boolean
+		String
+
+		注意： Math是对象不是函数，另外如果学生答Document等Dom中的函数也不对，因为题目要求为ECMAScript中5个内置函数？
+
+	7. ECMAScript中，数据类型有几种？
+		基本数据类型
+			undefined
+			null
+			number
+			string
+			boolean
+
+		引用数据类型
+			object 除了基本数据类型，所有的其他类型均为引用数据类型。
+
+
+	8. 将其他基本数据类型转换为number数据类型的方式有几种？并简述他们之间的区别
+		1) 通过转换函数 		Number()
+		2）通过数字解析函数		parseInt()
+		3）通过加性操作费		+
+
+		区别：
+			可以查看笔记
+	9. DOM中怎样创建、添加、移除、替换、复制和查找节点（写出方法名即可）
+		createElement()  	//创建
+		appendChild() 		//追加汉字节点
+		removeChild()		//删除孩子节点
+		replaceChild()		//替换孩子节点
+		cloneNode()				//克隆当前节点
+
+		getElementById()			//根据ID查找节点
+		getElementsByTagName()		//根据标签名查找节点
+		children					//孩子节点（元素节点）
+		nextElementSibling			//下一个兄弟节点（元素节点）
+		previousElementSibling		//上一个兄弟节点（元素节点）
+		parentElement				//父节点（元素节点）
+
+二. 阅读程序题
+	1. 阅读以下程序，回答问题
+	     function getName() { console.log(5);}
+		1 function Foo() {
+		2    getName = function () { console.log(1); };
+		3    return this;
+		4 }
+		5 Foo.getName = function () { console.log(2);};
+		6 Foo.prototype.getName = function () { console.log(3);};
+		7 var getName = function () { console.log(4);};
+		8 
+
+		请写出以下每行代码的输出结果
+			Foo.getName();		//2 调用的是定义在Foo函数对象上的函数，所以执行的代码是5行
+			getName();			//4 调用时，从全局环境中寻找getName方法，由于第8行代码为函数声明，所以在所有代码执行之前会先初始化，然后第7行代码会覆盖它。所以执行的代码是7行
+			Foo().getName();	//1 Foo()调用后返回this而在Foo内部this的值为window.所以
+			getName();			//1	由于上面代码的调用，全局环境中的getName被覆盖为2行代码，所以执行2行代码
+			new Foo.getName();	//2 先执行Foo.getName(),再对Foo.getName()的返回值执行new操作。调用的是定义在Foo函数对象上的函数，所以执行的代码是5行 
+			new Foo().getName();//3 先执行new Foo(),返回Foo的实例，调用Foo的实例的getName(),Foo实例中因为没有getName方法，所以为寻找Foo.prototype中的getName方法，执行6行
+	2. 阅读以下程序，回答问题
+		function fun(n,o) {
+		  	console.log(o)
+		  	return {
+		    	fun:function(m){
+		      		return fun(m,n);
+		    	}
+		  	};
+		}
+		请写出以下代码的输出结果
+		var a = fun(0);  
+			/*
+				运行结果：undefined
+				n:0,o:undefined。运行结果：打印undefined，返回
+				a = {
+					fun:function(m){
+		      			return fun(m,n);
+		    		}
+		    	},
+			*/
+		a.fun(1); 
+			/*
+				由于上面代码的运行，
+					会出现一个闭包，导致一直维护 n:0,
+					m:1
+					a.fun = function(m){return fn(m,n)}
+				现在参数：
+					return fn(1,0)
+					n:1; o:0
+				运行结果: 0
+					返回值无人接受。所以a的值不变
+				a = {
+					fun:function(m){
+		      			return fun(m,n);
+		    		}
+		    	},
+			*/ 
+		a.fun(2);
+			/*
+				分析方法如上
+			*/ 
+		a.fun(3);
+			/*
+				分析方法如上
+			*/ 
+		
+
+	3. 阅读以下程序，回答问题
+		var arr = new Array("terry","tom","vicky");
+		var a = arr.toString();
+		var b = arr.hasOwnProperty("length");
+		1) 简述每行代码的含义，并写出arr,a,b的值
+			第一行: 创建数组
+			第二行: 调用方法将一个数组转换为字符串
+			第三行: 判断length属性是否是arr自有属性
+				arr = ["terry","tom","vicky"];
+				a = terry,tom,vicky
+				b = true
+		2) arr为什么可以调用toString()方法，（可以画图说明）
+			arr是Array函数的实例，Array函数的原型中重写了toString方法，Array的原型是Object的实例（原型链继承），当arr调用toString的时候，先去直接父类Array的原型中寻找toString()方法，如果找不到再去Object原型中寻找。
+		3) arr为什么可以调用hasOwnProperty()方法，（可以画图说明）
+			arr是Array函数的实例，Array的原型是Object的实例（原型链继承），当arr调用hasOwnProperty()的时候，先去直接父类Array的原型中寻找hasOwnProperty()方法，找不到再去Object原型中寻找。所以调用的hasOwnProperty()方法实际上是Object原型的方法。
+
+	4. 阅读以下代码，回答问题
+		length = 10;
+		function fn(){
+		    console.log(this.length)
+		};
+		var obj = {
+		    length: 5,
+		   
+		    method: function(fn) {
+		
+		        fn() 
+		        arguments[0]() 
+
+		    }
+		};
+
+		obj.method(fn);
+
+		var arr= [fn,fn,fn]; arr[2](); 
+
+
+	
+		1) this的值在什么时候时候确定？由谁来决定？
+			this是函数的内部属性，其值在运行的时候才能确定，由调用方式来决定
+		2) 函数调用方法有几种？
+			有以下几种调用方式：
+				1. 直接调用  		fn();
+				2. 通过call调用	fn.call();
+				3. 通过apply调用	fn.apply();
+				4. 通过new调用	new fn()
+                5. arguments.callee()
+		3) 以下代码执行后，在控制台中打印的结果为？
+			10  fn()执行时，this为window，所以其length为10
+			1	arguments[0]() 执行时，[0]可以理解为函数的引用，指向fn，fn中的this为arguments,arguments具有属性length表示实参类数组的长度，因为只有一个实参，结果为1
+			3  	arr[2]()执行时，[2]可以理解为函数的引用，指向fn,fn中的this为arr,this.length相当于arr.length,结果为3
+
+	5. 阅读以下代码，回答问题
+		foo = foo||bar 
+		1) 这行代码是什么意思？
+			当foo的值可以转换为true的时候，
+			foo = foo,当foo的值转化为false的时候，foo = bar
+		2) 使用if-else语句表示这行代码
+			if(foo){
+				foo = foo;
+			}else{
+				foo = bar;
+			}
+		3) 使用三目运算符表示这行代码
+			foo = foo?foo:bar;
+三. 编程题
+	1.随即选取1~100之间的10个整数,并把这些值放到一个数组中,然后使用sort对该数组进行升序排序
+		<script type="text/javascript">
+			var arr = [];
+			for(i=0;i<10;i++){
+				var random = Math.round(Math.random()*100);
+				arr.push(random);
+			}
+			console.log(arr);	//排序前
+			arr.sort(function(a,b){
+				if(a>b){
+					return 1;
+				}else{
+					return -1;
+				}
+			});
+			console.log(arr);	//排序后
+		</script>
+
+	2.使用递归和循环实现1!+2!+3!+4!+...+10!
+		<script type="text/javascript">
+			//递归，计算n的阶乘
+			function recursion(n){
+				if(n<=1){
+					return 1;
+				}else{
+					//return n*arguments.callee(n-1);
+					return n*recursion(n-1)
+				}
+			}
+			//循环
+			var result = 0;
+			for(var i=1;i<11;i++){
+				result += recursion(i);
+			}
+			console.log(result);
+		</script>
+
+	3.定义一个方法，传入一个string类型的参数，然后将string的每个字符间加个空格返回。例如： spacify('hello world') // => 'h e l l o  w o r l d' 
+	1)请写出spacify如何实现？
+		<script type="text/javascript">
+		function spacify(str){
+			return str.split("").join(" ");
+			}
+		   var result = spacify('hello world');
+		   console.log(result);
+			</script>
+		2)如果想按照以下方法来调用spacify,该方法改如何实现'hello world'.spacify();
+		   str = new String("hello world");
+		   str.spaceify()
+			<script type="text/javascript">
+				String.prototype.spacify = function(){
+					return this.split("").join(" ");
+				};
+				console.log('hello world'.spacify());
+			</script>
+	4.已知有字符串foo=”get-element-by-id”,写一个function将其转化成驼峰表示法”getElementById”。
+	 1) 想办法将foo里面的-去掉  使用方法将字符串分割
+	      arr=["get","element","by","id"]
+		<script type="text/javascript">
+		
+		 function combo(msg){
+			    var arr=msg.split("-");
+			    var str=""
+			    for(var i=1;i<arr.length;i++){
+			        arr[i]=arr[i].charAt(0).toUpperCase()+arr[i].substr(1,arr[i].length-1);
+                          str=str+arr[i]
+			    }
+			   
+			    msg=arr.join("");
+			    return msg;
+			}
+		</script>
+	5.下面这个ul，如何点击每一列的时候alert其index?
+		<ul id=”test”>
+		<li>这是第一条</li>
+		<li>这是第二条</li>
+		<li>这是第三条</li>
+		</ul>
+
+		<script type="text/javascript">
+		window.onload = function(){
+	var lis = document.getElementsByTagName("li");
+	  for(var i=0;i<lis.length;i++){
+	    lis[i].onclick = (function(m){
+		return function(){
+		   alert(m+1);
+			  }
+				})(i);
+			}
+		}
+		</script>
+	 好多种
+	 var lis = document.getElementsByTagName("li");
+	  for(var i=0;i<lis.length;i++){
+	    lis[i].index =i+1;
+	    lis[i].onclick = (function(m){
+		alert(this.index)
+		}
+
+
+----------------------
+6.输出今天的日期，以YYYY-MM-DD的方式，比如今天是2014年9月26日，则输出2014-09-26
+	var d = new Date();
+	// 获取年，getFullYear()返回4位的数字
+	var year = d.getFullYear();
+	// 获取月，月份比较特殊，0是1月，11是12月
+	var month = d.getMonth() + 1;
+		// 变成两位
+	month = month < 10 ? '0' + month : month;
+		// 获取日
+	var day = d.getDate();
+	day = day < 10 ? '0' + day : day;
+	 alert(year + '-' + month + '-' + day);
+
+
+
+
+
+

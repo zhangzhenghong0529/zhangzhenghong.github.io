@@ -1,0 +1,28 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+	<title>Document</title>
+	<script type="text/javascript">
+		var arr=[];
+		for(i=0;i<10;i++){
+			var random =Math.round(Math.random()*100);
+			arr.unshift(random)
+			//arr.push(random)
+		}
+		console.log(arr)//排序前取出的10个随机数
+		arr.sort(function(a,b){
+			if(a>b){
+				return 1;
+
+			}else{
+				return-1;
+			}
+		});
+		console.log(arr)
+	</script>
+</head>
+<body>
+	
+</body>
+</html>

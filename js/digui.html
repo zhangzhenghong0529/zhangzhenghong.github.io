@@ -1,0 +1,27 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+	<title>Document</title>
+	<script type="text/javascript">
+		//计算n的阶乘
+		//1!+2!+3!+...10!
+		function recursion(n){
+			if(n==1){
+				return 1;
+			}else{
+				return n*recursion(n-1);
+				//return n*arguments.callee(n-1);
+			}
+		}
+		var reslut=0;
+		for(var i=1;i<=10;i++){
+			reslut+=recursion(i);
+		}
+		console.log(reslut)
+	</script>
+</head>
+<body>
+	
+</body>
+</html>
